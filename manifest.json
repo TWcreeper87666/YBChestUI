@@ -1,0 +1,41 @@
+{
+    "format_version": 2,
+    "header": {
+        "description": "記得開啟測試版API及假日創作者功能",
+        "name": "api play",
+        "uuid": "0e995ae8-5eab-46dc-99c3-15823fcd920b",
+        "version": [
+            8,
+            7,
+            6
+        ],
+        "min_engine_version": [
+            1,
+            19,
+            60
+        ]
+    },
+    "modules": [
+        {
+            "uuid": "9c64aa95-51c4-43ef-ae9f-c28b9f44fc5d",
+            "version": [
+                1,
+                0,
+                0
+            ],
+            "type": "script",
+            "language": "javascript",
+            "entry": "scripts/Main.js"
+        }
+    ],
+    "dependencies": [
+        {
+            "module_name": "@minecraft/server",
+            "version": "1.4.0-beta"
+        },
+        {
+            "module_name": "@minecraft/server-ui",
+            "version": "1.2.0-beta"
+        }
+    ]
+}
