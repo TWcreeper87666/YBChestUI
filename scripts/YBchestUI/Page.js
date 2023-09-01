@@ -1,8 +1,9 @@
 import { Button } from './Button';
+import { PAGES, setPlayerPage } from './ChestUI';
 /** 頁面類別 */
 export class Page {
     /**
-     * 建立新頁面
+     * 建立新頁面 (自動存入 PAGES)
      * @param name 頁面名稱
      * @param button 頁面中的按鈕
      * @returns 新建的 Page 實例
@@ -13,6 +14,7 @@ export class Page {
         this.name = name;
         for (const btn of button)
             this.buttons.set(btn.slot, btn);
+        PAGES.set(name, this);
     }
     /** 新增按鈕到頁面 @param button 要新增的按鈕 */
     addButton(...button) {
@@ -22,14 +24,19 @@ export class Page {
     }
     /**
      * 範圍新增按鈕到頁面
-     * @param from 從
-     * @param to 至
+     * @param range 範圍
      * @param nameTag 名稱標籤
      * @param details 額外的詳細資訊
      */
-    rangeButton(from, to, nameTag, details) {
-        for (let i = from; i <= to; i++) {
+    sameButton(range, nameTag, details) {
+        const step = range?.step ? range.step : 1;
+        for (let i = range.from; i <= range.to; i += step) {
             this.newButton(i, nameTag, details);
+        }
+        if (range?.others) {
+            for (let i of range.others) {
+                this.newButton(i, nameTag, details);
+            }
         }
         return this;
     }
@@ -38,23 +45,17 @@ export class Page {
      * @param slot 按鈕的欄位
      * @param nameTag 名稱標籤
      * @param details 額外的詳細資訊
-     * @returns 新建的 Button 實例
      */
     newButton(slot, nameTag, details) {
         const button = new Button(slot, nameTag, details);
         this.buttons.set(slot, button);
-        return button;
+        return this;
     }
     /** 移除指定按鈕 @param buttonSlot 要移除的按鈕欄位或按鈕實例 */
     removeButton(...buttonSlot) {
         for (const btnSlot of buttonSlot) {
             this.buttons.delete(btnSlot instanceof Button ? btnSlot.slot : btnSlot);
         }
-        return this;
-    }
-    /** 清空所有按鈕 */
-    clearButton() {
-        this.buttons.clear();
         return this;
     }
     /**
@@ -66,23 +67,51 @@ export class Page {
      */
     update(player, inventory, container, ignore) {
         if (ignore) {
-            for (let slot = 0; slot < 27; slot++)
-                container.transferItem(slot, inventory);
+            for (let slot = 0; slot < 54; slot++) {
+                safeTransfer(player, inventory, container, slot);
+            }
+            player.runCommand("give @s yb:air"); // debug
         }
         for (const [slot, button] of this.buttons) {
             const slotItem = container.getItem(slot);
-            if (slotItem && slotItem.isStackableWith(button.item))
-                continue;
-            player.runCommand('clear @s yb:button');
-            player.runCommand('clear @s yb:label');
-            player.runCommand('clear @s yb:bg');
-            container.transferItem(slot, inventory);
+            const sameTypeId = slotItem?.typeId === button.item.typeId;
+            switch (button.updateMode) {
+                case "icon":
+                    if (sameTypeId)
+                        continue;
+                case "air":
+                    if (slotItem)
+                        continue;
+                case "all":
+                    if (slotItem?.isStackableWith(button.item))
+                        continue;
+            }
+            safeTransfer(player, inventory, container, slot);
+            player.runCommand("function clear");
             container.setItem(slot, button.item);
             if (ignore)
                 continue;
+            if (button.pageAfterClick) {
+                setPlayerPage(player, button.pageAfterClick);
+            }
             if (button.onClickFunc) {
                 button.onClickFunc({ player, inventory, container, button });
             }
+        }
+    }
+}
+function safeTransfer(player, inventory, container, slot) {
+    const item = container.getItem(slot);
+    if (!item)
+        return;
+    if (item.typeId.startsWith("yb:")) {
+        container.setItem(slot);
+    }
+    else {
+        container.transferItem(slot, inventory);
+        if (container.getItem(slot)) {
+            container.setItem(slot);
+            player.dimension.spawnItem(item, player.location);
         }
     }
 }
