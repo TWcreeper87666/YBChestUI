@@ -9,6 +9,7 @@ https://github.com/Smelly-API/Smelly-API
 * 記得關掉showtags不然會很醜
 * 私人頁面不知怎麼搞比較好,有需求可以自己用onClickFunc做
 * 一些類型可以用'或者"來查看裡面的內容
+* items請自行解壓縮lol
 
 ## 物品
 指南針: 開啟介面,第一次要養他喔! (請以領養代替購買)  
