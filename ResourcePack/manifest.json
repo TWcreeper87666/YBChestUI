@@ -1,0 +1,29 @@
+{
+    "format_version": 2,
+    "header": {
+        "description": "idk",
+        "name": "YBchestUI",
+        "uuid": "537efc09-c39b-4191-8f56-bd3f3cf67807",
+        "version": [
+            8,
+            7,
+            6
+        ],
+        "min_engine_version": [
+            1,
+            19,
+            60
+        ]
+    },
+    "modules": [
+        {
+            "uuid": "9c64aa95-51c4-43ef-ae9f-c28b9f44fc5d",
+            "version": [
+                1,
+                0,
+                0
+            ],
+            "type": "resources"
+        }
+    ]
+}
