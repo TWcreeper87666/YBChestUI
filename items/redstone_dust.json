@@ -1,0 +1,19 @@
+{
+        "format_version": "1.20.0",
+        "minecraft:item": {
+            "description": {
+                "category": "commands",
+                "identifier": "yb:redstone_dust"
+            },
+            "components": {
+                "minecraft:icon": {
+                    "texture": "redstone_dust"
+                },
+                "minecraft:display_name": {
+                    "value": "redstone_dust"
+                },
+                "minecraft:max_stack_size": 64,
+                "minecraft:stacked_by_data": false
+            }
+        }
+    }
