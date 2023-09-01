@@ -29,6 +29,5 @@ new Page('menu',
             v.inventory.addItem(new ItemStack('minecraft:cooked_beef', 1))
             v.player.playSound('random.orb')
         }
-
     })
 )
