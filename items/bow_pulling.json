@@ -1,0 +1,19 @@
+{
+        "format_version": "1.20.0",
+        "minecraft:item": {
+            "description": {
+                "category": "commands",
+                "identifier": "yb:bow_pulling"
+            },
+            "components": {
+                "minecraft:icon": {
+                    "texture": "bow_pulling"
+                },
+                "minecraft:display_name": {
+                    "value": "bow_pulling"
+                },
+                "minecraft:max_stack_size": 64,
+                "minecraft:stacked_by_data": false
+            }
+        }
+    }
