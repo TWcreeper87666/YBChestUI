@@ -1,5 +1,5 @@
 /** 可使用的物品圖示 */
-export enum ICON {
+export declare enum ICON {
     acacia_door = "yb:acacia_door",
     amethyst_shard = "yb:amethyst_shard",
     apple = "yb:apple",
@@ -236,9 +236,8 @@ export enum ICON {
     wooden_door = "yb:wooden_door",
     air = "yb:air"
 }
-
 /** 覆蓋用物品圖示 */
-export enum ICONR {
+export declare enum ICONR {
     acacia_door = "door_acacia",
     axe = "wood_axe",
     bed = "bed_white",
@@ -279,5 +278,5 @@ export enum ICONR {
     spruce_door = "door_spruce",
     sword = "wood_sword",
     warped_sign_item = "sign_warped",
-    wooden_door = "door_wood",
+    wooden_door = "door_wood"
 }

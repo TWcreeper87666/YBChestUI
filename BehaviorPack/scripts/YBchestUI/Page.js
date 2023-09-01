@@ -70,24 +70,21 @@ export class Page {
             for (let slot = 0; slot < 54; slot++) {
                 safeTransfer(player, inventory, container, slot);
             }
-            player.runCommand("give @s yb:air"); // debug
+            player.runCommand('give @s yb:air'); // debug
+            player.runCommand('function clear');
         }
         for (const [slot, button] of this.buttons) {
             const slotItem = container.getItem(slot);
             const sameTypeId = slotItem?.typeId === button.item.typeId;
-            switch (button.updateMode) {
-                case "icon":
-                    if (sameTypeId)
-                        continue;
-                case "air":
-                    if (slotItem)
-                        continue;
-                case "all":
-                    if (slotItem?.isStackableWith(button.item))
-                        continue;
-            }
+            const mode = button.updateMode;
+            if (mode === 'icon' && sameTypeId)
+                continue;
+            if (mode === 'air' && slotItem)
+                continue;
+            if (mode === 'all' && slotItem?.isStackableWith(button.item))
+                continue;
             safeTransfer(player, inventory, container, slot);
-            player.runCommand("function clear");
+            player.runCommand('function clear');
             container.setItem(slot, button.item);
             if (ignore)
                 continue;
@@ -104,7 +101,7 @@ function safeTransfer(player, inventory, container, slot) {
     const item = container.getItem(slot);
     if (!item)
         return;
-    if (item.typeId.startsWith("yb:")) {
+    if (item.typeId.startsWith('yb:')) {
         container.setItem(slot);
     }
     else {

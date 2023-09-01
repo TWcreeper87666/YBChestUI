@@ -74,6 +74,16 @@ export class ChestUI {
         loaded = true;
     }
     /**
+     * 新增入口設定
+     * @param homePage 主頁面名稱
+     * @param queryOptions 玩家目標選擇器
+     * @param resetWhenLeave 玩家離線時切換至主頁 (預設為 true)
+     * @param resetWhenReload reload時讓玩家回到主頁 (預設為 true)
+     */
+    addEntrance(homePage, queryOptions, resetWhenLeave, resetWhenReload) {
+        ENTRANCES.push(new Entrance(homePage, queryOptions, resetWhenLeave, resetWhenReload));
+    }
+    /**
      * 取得玩家的 UI 實體
      * @param player 玩家實例
      * @returns UI 實體

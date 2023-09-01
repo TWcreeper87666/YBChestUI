@@ -31,8 +31,8 @@ export class Button {
             this.pageAfterClick = details.pageAfterClick;
         if (typeof details?.onClickFunc === 'function')
             this.onClickFunc = details.onClickFunc;
-        if (details?.updateMode === "icon")
-            this.updateMode = "icon";
+        if (details?.updateMode)
+            this.updateMode = details.updateMode;
     }
     /** 設定按鈕的點擊事件 @param onClickFunc 點擊事件回呼函式 */
     setOnClickFunc(onClickFunc) {
