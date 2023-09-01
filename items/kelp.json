@@ -1,0 +1,19 @@
+{
+        "format_version": "1.20.0",
+        "minecraft:item": {
+            "description": {
+                "category": "commands",
+                "identifier": "yb:kelp"
+            },
+            "components": {
+                "minecraft:icon": {
+                    "texture": "kelp"
+                },
+                "minecraft:display_name": {
+                    "value": "kelp"
+                },
+                "minecraft:max_stack_size": 64,
+                "minecraft:stacked_by_data": false
+            }
+        }
+    }

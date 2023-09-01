@@ -1,0 +1,19 @@
+{
+        "format_version": "1.20.0",
+        "minecraft:item": {
+            "description": {
+                "category": "commands",
+                "identifier": "yb:minecart_chest"
+            },
+            "components": {
+                "minecraft:icon": {
+                    "texture": "minecart_chest"
+                },
+                "minecraft:display_name": {
+                    "value": "minecart_chest"
+                },
+                "minecraft:max_stack_size": 64,
+                "minecraft:stacked_by_data": false
+            }
+        }
+    }

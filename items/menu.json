@@ -1,0 +1,29 @@
+{
+    "format_version": "1.16.100",
+    "minecraft:item": {
+        "description": {
+            "category": "equipment",
+            "identifier": "yb:menu"
+        },
+        "components": {
+            "minecraft:icon": {
+                "texture": "lever"
+            },
+            "minecraft:display_name": {
+                "value": "開關"
+            },
+            "minecraft:foil": true,
+            "minecraft:max_stack_size": 1,
+            "minecraft:hover_text_color": "light_purple",
+            "minecraft:on_use": {
+                "on_use": {
+                    "event": "yb:menu",
+                    "target": "self"
+                }
+            }
+        },
+        "events": {
+            "yb:menu": {}
+        }
+    }
+}
