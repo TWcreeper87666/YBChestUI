@@ -1,0 +1,19 @@
+{
+        "format_version": "1.20.0",
+        "minecraft:item": {
+            "description": {
+                "category": "commands",
+                "identifier": "yb:flint_and_steel"
+            },
+            "components": {
+                "minecraft:icon": {
+                    "texture": "flint_and_steel"
+                },
+                "minecraft:display_name": {
+                    "value": "flint_and_steel"
+                },
+                "minecraft:max_stack_size": 64,
+                "minecraft:stacked_by_data": false
+            }
+        }
+    }

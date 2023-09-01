@@ -1,0 +1,19 @@
+{
+        "format_version": "1.20.0",
+        "minecraft:item": {
+            "description": {
+                "category": "commands",
+                "identifier": "yb:coal"
+            },
+            "components": {
+                "minecraft:icon": {
+                    "texture": "coal"
+                },
+                "minecraft:display_name": {
+                    "value": "coal"
+                },
+                "minecraft:max_stack_size": 64,
+                "minecraft:stacked_by_data": false
+            }
+        }
+    }
