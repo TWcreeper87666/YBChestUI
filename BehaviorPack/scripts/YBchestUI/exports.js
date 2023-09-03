@@ -1,4 +1,15 @@
-/** 可使用的物品圖示 */
+//////////////////// class & function
+export { Entrance } from './Entrance';
+export { Page } from './Page';
+export { Button } from './Button';
+export { UIerror, checkTypes } from './UIerror';
+export var ButtonUpdateMode;
+(function (ButtonUpdateMode) {
+    ButtonUpdateMode["all"] = "all";
+    ButtonUpdateMode["air"] = "air";
+    ButtonUpdateMode["icon"] = "icon";
+})(ButtonUpdateMode || (ButtonUpdateMode = {}));
+//////////////////// button
 export var ICON;
 (function (ICON) {
     ICON["acacia_door"] = "yb:acacia_door";
@@ -237,7 +248,6 @@ export var ICON;
     ICON["wooden_door"] = "yb:wooden_door";
     ICON["air"] = "yb:air";
 })(ICON || (ICON = {}));
-/** 覆蓋用物品圖示 */
 export var ICONR;
 (function (ICONR) {
     ICONR["acacia_door"] = "door_acacia";

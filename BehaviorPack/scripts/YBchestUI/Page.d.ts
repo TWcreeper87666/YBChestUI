@@ -1,16 +1,5 @@
 import { Player, Container } from '@minecraft/server';
-import { Button, Details } from './Button';
-/** 按鈕的詳細資訊型別 */
-type Range = {
-    /** 從 */
-    from: number;
-    /** 到 */
-    to: number;
-    /** 間隔 */
-    step?: number;
-    /** 其他 */
-    others?: number[];
-};
+import { Button, ButtonDetails, Range } from './exports';
 /** 頁面類別 */
 export declare class Page {
     /** 頁面名稱 */
@@ -28,22 +17,22 @@ export declare class Page {
     addButton(...button: Button[]): Page;
     /**
      * 範圍新增按鈕到頁面
-     * @param range 範圍
+     * @param range 範圍 (from, to, step, others)
      * @param nameTag 名稱標籤
      * @param details 額外的詳細資訊
      */
-    sameButton(range: Range, nameTag: string, details?: Details): this;
+    sameButton(range: Range, nameTag: string, details?: ButtonDetails): this;
     /**
      * 新建按鈕並加入到頁面
      * @param slot 按鈕的欄位
      * @param nameTag 名稱標籤
      * @param details 額外的詳細資訊
      */
-    newButton(slot: number, nameTag: string, details?: Details): Page;
+    newButton(slot: number, nameTag: string, details?: ButtonDetails): Page;
     /** 移除指定按鈕 @param buttonSlot 要移除的按鈕欄位或按鈕實例 */
     removeButton(...buttonSlot: (number | Button)[]): Page;
     /**
-     * 更新頁面的按鈕(這是給系統跑的)
+     * 更新頁面的按鈕 (這是給系統跑的)
      * @param player 玩家實例
      * @param inventory 玩家的背包
      * @param container 容器
@@ -51,4 +40,3 @@ export declare class Page {
      */
     update(player: Player, inventory: Container, container: Container, ignore: boolean): void;
 }
-export {};

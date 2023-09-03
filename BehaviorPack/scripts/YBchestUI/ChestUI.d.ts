@@ -1,30 +1,7 @@
 import { Player, Entity } from '@minecraft/server';
-import * as mc from '@minecraft/server';
-import { Button } from './Button';
-import { ICON } from './items';
-import { Page } from './Page';
-type Query = mc.EntityQueryOptions;
+import { Entrance, Page, Button, ICON, Query } from './exports';
 declare const PAGES: Map<string, Page>;
 declare const ENTRANCES: Entrance[];
-/** 入口設定類別 */
-export declare class Entrance {
-    /** 主頁面名稱 */
-    homePage: Page;
-    /** 玩家目標選擇器 */
-    queryOptions: Query;
-    /** 玩家離線時切換至主頁 (預設為 true) */
-    resetWhenLeave: boolean;
-    /** reload時讓玩家回到主頁 (預設為 true) */
-    resetWhenReload: boolean;
-    /**
-     * 建立 Entrance 實例
-     * @param homePage 主頁面名稱
-     * @param queryOptions 玩家目標選擇器
-     * @param resetWhenLeave 玩家離線時切換至主頁 (預設為 true)
-     * @param resetWhenReload reload時讓玩家回到主頁 (預設為 true)
-     */
-    constructor(homePage: Page | string, queryOptions?: Query, resetWhenLeave?: boolean, resetWhenReload?: boolean);
-}
 /** ChestUI類別 */
 export declare class ChestUI {
     /** 全部頁面的字典 */
@@ -34,13 +11,13 @@ export declare class ChestUI {
     /**
      * 建立 ChestUI 實例
      * @param homePage 主頁面名稱
-     * @param isLarge 使用大介面
+     * @param isLarge 使用大介面 (預設為 false)
      * @param queryOptions 玩家目標選擇器
      * @param resetWhenLeave 玩家離線時切換至主頁 (預設為 true)
      * @param resetWhenReload reload時讓玩家回到主頁 (預設為 true)
      * @param otherEntrance 其他入口設定
      */
-    constructor(homePage: Page | string, isLarge: boolean, queryOptions?: Query, resetWhenLeave?: boolean, resetWhenReload?: boolean, ...otherEntrance: Entrance[]);
+    constructor(homePage: Page | string, isLarge?: boolean, queryOptions?: Query, resetWhenLeave?: boolean, resetWhenReload?: boolean, ...otherEntrance: Entrance[]);
     /**
      * 新增入口設定
      * @param homePage 主頁面名稱
@@ -87,6 +64,6 @@ declare const getPlayerPage: typeof ChestUI.getPlayerPage;
 declare const resetPlayerPage: typeof ChestUI.resetPlayerPage;
 declare const getUI: typeof ChestUI.getUI;
 declare const exitUI: typeof ChestUI.exitUI;
-export { PAGES, ENTRANCES, ICON };
+export { PAGES, ENTRANCES };
 export { setPlayerPage, getPlayerPage, resetPlayerPage, getUI, exitUI };
-export { Button, Page };
+export { Button, Page, Entrance, ICON };

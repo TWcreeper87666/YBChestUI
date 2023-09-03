@@ -1,61 +1,19 @@
-import { world, system, EntityTypes, DynamicPropertiesDefinition, Vector } from '@minecraft/server';
+import { world, system, EntityTypes, DynamicPropertiesDefinition, Player, Vector } from '@minecraft/server';
 import * as ui from '@minecraft/server-ui';
-import { Button } from './Button';
-import { ICON, ICONR } from './items';
-import { Page } from './Page';
+import { Entrance, Page, Button, UIerror, checkTypes, ICON, ICONR } from './exports';
 const dim = world.getDimension('overworld');
-let loaded = false;
-let available = false;
+var loaded = false;
+var available = false;
 var LARGE = false;
 const PAGES = new Map();
 const ENTRANCES = [];
-class UIerror extends Error {
-    constructor(name) {
-        super();
-        this.name = name;
-        const source = [];
-        if (!this.stack)
-            return;
-        for (const line of this.stack.split('\n')) {
-            if (line && !line.includes('YBchestUI'))
-                source.push(line);
-        }
-        this.stack = source.join('\n');
-        world.sendMessage(`§l§cERROR: ${this.name}`);
-    }
-}
-/** 入口設定類別 */
-export class Entrance {
-    /**
-     * 建立 Entrance 實例
-     * @param homePage 主頁面名稱
-     * @param queryOptions 玩家目標選擇器
-     * @param resetWhenLeave 玩家離線時切換至主頁 (預設為 true)
-     * @param resetWhenReload reload時讓玩家回到主頁 (預設為 true)
-     */
-    constructor(homePage, queryOptions, resetWhenLeave, resetWhenReload) {
-        /** 玩家離線時切換至主頁 (預設為 true) */
-        this.resetWhenLeave = true;
-        /** reload時讓玩家回到主頁 (預設為 true) */
-        this.resetWhenReload = true;
-        if (homePage instanceof Page)
-            this.homePage = homePage;
-        else if (PAGES.has(homePage))
-            this.homePage = PAGES.get(homePage);
-        else
-            this.homePage = new Page(homePage);
-        if (queryOptions)
-            this.queryOptions = queryOptions;
-        this.resetWhenLeave = !resetWhenLeave;
-        this.resetWhenReload = !resetWhenReload;
-    }
-}
+PAGES.set('undefined', new Page('undefined', new Button(13, ' §r§l§c無權使用chestUI', { icon: 'camera' })));
 /** ChestUI類別 */
 export class ChestUI {
     /**
      * 建立 ChestUI 實例
      * @param homePage 主頁面名稱
-     * @param isLarge 使用大介面
+     * @param isLarge 使用大介面 (預設為 false)
      * @param queryOptions 玩家目標選擇器
      * @param resetWhenLeave 玩家離線時切換至主頁 (預設為 true)
      * @param resetWhenReload reload時讓玩家回到主頁 (預設為 true)
@@ -67,7 +25,8 @@ export class ChestUI {
         /** 入口設定陣列 */
         this.ENTRANCES = ENTRANCES;
         if (loaded)
-            throw new UIerror('只能有一個ChestUI');
+            throw new UIerror('只能有一個 ChestUI');
+        checkTypes('new ChestUI', arguments, [[Page, 'string'], 'boolean', 'object', 'boolean', 'boolean', Entrance], 1);
         ENTRANCES.push(new Entrance(homePage, queryOptions, resetWhenLeave, resetWhenReload), ...otherEntrance);
         LARGE = isLarge;
         mcInit();
@@ -81,6 +40,7 @@ export class ChestUI {
      * @param resetWhenReload reload時讓玩家回到主頁 (預設為 true)
      */
     addEntrance(homePage, queryOptions, resetWhenLeave, resetWhenReload) {
+        checkTypes('addEntrance', arguments, [[Page, 'string'], 'object', 'boolean', 'boolean'], 1);
         ENTRANCES.push(new Entrance(homePage, queryOptions, resetWhenLeave, resetWhenReload));
     }
     /**
@@ -90,6 +50,7 @@ export class ChestUI {
      */
     static getUI(player) {
         ChestUI.check();
+        checkTypes('getUI', arguments, [Player]);
         var entity = world.getEntity(player.getDynamicProperty('UIID'));
         if (entity?.isValid())
             return entity;
@@ -108,6 +69,7 @@ export class ChestUI {
      */
     static exitUI(player, backToHomePage, ignoreAction) {
         ChestUI.check();
+        checkTypes('exitUI', arguments, [Player, 'boolean', 'boolean'], 1);
         var entity = ChestUI.getUI(player);
         entity.addTag('yb:exit');
         if (ignoreAction)
@@ -126,6 +88,7 @@ export class ChestUI {
      */
     static setPlayerPage(player, page) {
         ChestUI.check();
+        checkTypes('setPlayerPage', arguments, [Player, [Page, 'string']]);
         player.setDynamicProperty('ignore', true);
         player.setDynamicProperty('page', page instanceof Page ? page.name : page);
     }
@@ -136,6 +99,7 @@ export class ChestUI {
      */
     static getPlayerPage(player) {
         ChestUI.check();
+        checkTypes('getUI', arguments, [Player]);
         return PAGES.get(player.getDynamicProperty('page'));
     }
     /**
@@ -145,13 +109,14 @@ export class ChestUI {
      */
     static resetPlayerPage(player) {
         ChestUI.check();
+        checkTypes('getUI', arguments, [Player]);
         for (const entrance of ENTRANCES) {
             if (world.getPlayers({ name: player.name, ...entrance.queryOptions })[0]) {
-                player.setDynamicProperty('page', entrance.homePage.name);
-                player.setDynamicProperty('ignore', true);
+                ChestUI.setPlayerPage(player, entrance.homePage);
                 return entrance.homePage;
             }
         }
+        ChestUI.setPlayerPage(player, 'undefined');
     }
     static check() {
         if (!loaded)
@@ -178,11 +143,12 @@ function mcInit() {
                 return;
             }
         }
+        player.setDynamicProperty('page', 'undefined');
     });
     world.afterEvents.worldInitialize.subscribe((e) => {
         const player_def = new DynamicPropertiesDefinition()
             .defineNumber('pre_slot', -1)
-            .defineString('page', 20)
+            .defineString('page', 20, 'undefined')
             .defineBoolean('ignore', true)
             .defineString('UIID', 20, '0');
         e.propertyRegistry.registerEntityTypeDynamicProperties(player_def, EntityTypes.get('minecraft:player'));
@@ -192,15 +158,22 @@ function mcInit() {
         available = true;
         dim.runCommand('tag @e[type=yb:inventory] remove yb:exit');
         dim.runCommand('tag @a remove yb:skip');
+        const playerUsing = new Set();
         for (const entrance of ENTRANCES) {
             if (!entrance.resetWhenReload)
                 continue;
             for (const player of world.getPlayers(entrance.queryOptions)) {
+                playerUsing.add(player.name);
                 setPlayerPage(player, entrance.homePage);
             }
         }
+        for (const player of world.getPlayers()) {
+            if (!playerUsing.has(player.name)) {
+                player.setDynamicProperty('page', 'undefined');
+            }
+        }
         for (const entity of dim.getEntities({ type: 'yb:inventory' })) {
-            const isLarge = entity.nameTag.endsWith("§.");
+            const isLarge = entity.nameTag.endsWith('§.');
             if (LARGE !== isLarge)
                 entity.nameTag = `YBchestUI${LARGE ? '§.' : ''}`;
         }
@@ -244,12 +217,12 @@ function update() {
         if (hold)
             updateUI(player, entity);
     });
-    for (let entity of dim.getEntities({ type: 'yb:inventory' })) {
+    for (const entity of dim.getEntities({ type: 'yb:inventory' })) {
         var player = world.getEntity(entity.getDynamicProperty('ownerID'));
         if (!player?.isValid())
             entity.triggerEvent('yb:kill');
     }
-    for (let item of dim.getEntities({ type: 'item' })) {
+    for (const item of dim.getEntities({ type: 'item' })) {
         if (item.getComponent('item')?.itemStack?.typeId?.startsWith('yb:')) {
             item.kill();
         }
@@ -262,21 +235,18 @@ function updateUI(player, entity) {
     }
     const ignore = player.getDynamicProperty('ignore');
     var page = getPlayerPage(player);
-    var missingPage;
     if (!page) {
-        missingPage = player.getDynamicProperty('page');
+        const missingPage = player.getDynamicProperty('page');
         page = resetPlayerPage(player);
+        if (page)
+            throw new UIerror(`找不到${missingPage}頁面`);
     }
-    if (!page)
-        return;
     const inventory = player.getComponent('inventory').container;
     const container = entity.getComponent('inventory').container;
     page.update(player, inventory, container, ignore);
     if (ignore)
         player.setDynamicProperty('ignore', false);
-    if (missingPage)
-        throw new UIerror(`找不到${missingPage}頁面`);
 }
-export { PAGES, ENTRANCES, ICON };
+export { PAGES, ENTRANCES };
 export { setPlayerPage, getPlayerPage, resetPlayerPage, getUI, exitUI };
-export { Button, Page };
+export { Button, Page, Entrance, ICON };

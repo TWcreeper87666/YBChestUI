@@ -1,4 +1,57 @@
-/** 可使用的物品圖示 */
+import { Container, Player } from "@minecraft/server";
+import * as mc from '@minecraft/server';
+import { Page } from './Page';
+import { Button } from './Button';
+export type Item = mc.EntityItemComponent;
+export type Inventory = mc.EntityInventoryComponent;
+export type Query = mc.EntityQueryOptions;
+export { Entrance } from './Entrance';
+export { Page } from './Page';
+export { Button } from './Button';
+export { UIerror, checkTypes } from './UIerror';
+export type Range = {
+    /** 從 (需搭配 to) */
+    from?: number;
+    /** 到 (需搭配 from)*/
+    to?: number;
+    /** 間隔 (預設為 1)*/
+    step?: number;
+    /** 其他索引值 */
+    others?: number[];
+};
+export type ButtonClickCallback = (arg: {
+    /** 觸發事件的玩家 */
+    player: Player;
+    /** 玩家的背包 */
+    inventory: Container;
+    /** 按鈕所在的容器 */
+    container: Container;
+    /** 被點擊的按鈕 */
+    button: Button;
+}) => void;
+export declare enum ButtonUpdateMode {
+    all = "all",
+    air = "air",
+    icon = "icon"
+}
+export type ButtonDetails = {
+    icon?: keyof typeof ICON;
+    /** 按鈕的描述 */
+    lore?: string[];
+    /** 物品的數量 */
+    amount?: number;
+    /** 點擊後切換至頁面 */
+    pageAfterClick?: string | Page;
+    /** 按鈕的點擊事件 */
+    onClickFunc?: ButtonClickCallback;
+    /**
+     * 點擊事件更新模式 (預設為 all)
+     * @all 物品改變時更新
+     * @icon 物品圖示改變時更新 (typeId)
+     * @air 物品變成空氣時更新
+    */
+    updateMode?: keyof typeof ButtonUpdateMode;
+};
 export declare enum ICON {
     acacia_door = "yb:acacia_door",
     amethyst_shard = "yb:amethyst_shard",
@@ -236,7 +289,6 @@ export declare enum ICON {
     wooden_door = "yb:wooden_door",
     air = "yb:air"
 }
-/** 覆蓋用物品圖示 */
 export declare enum ICONR {
     acacia_door = "door_acacia",
     axe = "wood_axe",
