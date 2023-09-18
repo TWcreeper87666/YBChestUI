@@ -135,7 +135,7 @@ function mcInit() {
         if (!initialSpawn)
             return;
         for (const entrance of ENTRANCES) {
-            if (entrance.resetWhenLeave)
+            if (!entrance.resetWhenLeave)
                 continue;
             if (world.getPlayers({ name: player.name, ...entrance.queryOptions })[0]) {
                 player.setDynamicProperty('page', entrance.homePage.name);
