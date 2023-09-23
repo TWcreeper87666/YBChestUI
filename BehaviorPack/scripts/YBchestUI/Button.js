@@ -18,7 +18,7 @@ export class Button {
             throw new UIerror('欄位最多只有54個 (0-based)');
         this.slot = slot;
         this.item = new ItemStack(details?.icon ? ICON[details.icon] : ICON.air, details?.amount);
-        this.item.nameTag = nameTag;
+        this.item.nameTag = nameTag ? nameTag : '§r';;
         this.item.setLore(details?.lore);
         this.item.lockMode = ItemLockMode.inventory;
         if (details?.pageAfterClick instanceof Page)
